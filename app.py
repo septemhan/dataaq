@@ -81,8 +81,8 @@ def CreateFile():
 	SeriesFile = today.strftime('%m%d%Y') #get a string of date in format of "04182016"
 
 	if not os.path.exists(SeriesFile):
-			tempDataFile = open(SeriesFile,'w')
-			tempDataFile.close()
+		tempDataFile = open(SeriesFile,'w')
+		tempDataFile.close()
 	return SeriesFile
 	
 def WriteData(_SeriesFile,_ADCNow):
@@ -95,10 +95,10 @@ def WriteData(_SeriesFile,_ADCNow):
 				writeline = writeline+str(d)+','
 			tempDataFile.write(str(formatted_ts)+','+writeline)
 			tempDataFile.write('\n')
-		    tempDataFile.close()
+			tempDataFile.close()
 	
 	except IOError:
-			print "unbale to create file"
+		print "unbale to create file"
 
 	os.chdir(abspath)
 	print " done add data to file "   
