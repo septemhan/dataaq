@@ -56,7 +56,7 @@ def ADC_Read_All():
 	for channel in range (0,7):
 		AdcNow[Channel] = ADC_Read(channel)
 		
-	return AdcNow
+	#return AdcNow
 	
 def CreateFile():
 
@@ -168,16 +168,19 @@ def SendFilebyEmail(_SeriesFile,_emaill):
 		print "Error: cannot send emails"
 		
 	
-def start():	
-	while(StartStatus):
+def start(_duration=10):
+	time_start = time.time()
+	while(time.time()-time_start)<=_duration):
 	    try:
 			ADC_Read_All()
-			WriteData(SeriesFile,ADCNow)
+			print AdcNow
+			time.sleep(0.01)
+			#WriteData(SeriesFile,ADCNow)
 		except Exception,e:
 		    print "Catch error at timestamp: s%" %formatted_ts
 			print str(e)
 			
-	WriteEndline(SeriesFile)
+	#WriteEndline(SeriesFile)
 	
 
 	
@@ -205,11 +208,7 @@ def main():
 	print "Task starts at %s" %formatted_ts
 	
 	#start a job
-	if (time.time()-time_start)<=duration
-		StartStatus = True
-	else:
-		StartStatus = False
-	start()
+	start(duration)
 	
 	#stop GPIO pin
 	GPIO.cleanup()
