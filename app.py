@@ -26,7 +26,7 @@ sensor_dict = {
 }
 #Glabal paramters:
 
-ADCNow = [0,0,0,0,0,0,0,0,0]
+AdcNow = [0,0,0,0,0,0,0,0,0]
 StartStatus = False
 
 
@@ -53,11 +53,11 @@ def ADC_Read(channel):
 
 def ADC_Read_All():
 
-	for channel in range (0,7):
-		AdcNow[Channel] = ADC_Read(channel)
-		
+	for channel in range (0,8):
+		AdcNow[channel] = ADC_Read(channel)
+
 	#return AdcNow
-	
+
 def CreateFile():
 
 	import datetime,os,sys
@@ -106,7 +106,8 @@ def WriteData(_SeriesFile,_ADCNow):
 def WriteEndline(_SeriesFile):
 
 	try:
-	    endline1 = "---------------------------------------\n"
+		
+	   	endline1 = "---------------------------------------\n"
 		endline2 = str(time.time())+"\n"
 		endline3 = "---------------------------------------\n"
 		tempDataFile = open(_SeriesFile,'a')
@@ -120,29 +121,28 @@ def WriteEndline(_SeriesFile):
 		print "unbale to add endline"
 			
 def SendFilebyEmail(_SeriesFile,_emaill):
- 
+
 	import smtplib
 	from email.mime.text import MIMEText
 	from email.mime.multipart import MIMEMultipart
 	from email.header import Header
 	
 	mail_host="smtp.163.com"  #host server
-    mail_user="linchen_han@163.com"    #username
-    mail_pass=""   #password 
+    	mail_user="linchen_han@163.com"    #username
+    	mail_pass=""   #password 
 	 
 	sender = 'from@runoob.com'
 	receivers = ['200565200@qq.com'] 
-	 
 	
 	message = MIMEMultipart()
 	message['From'] = Header("MPS Experiment Hub", 'utf-8')
 	message['To'] =  Header("users", 'utf-8')
 	subject = 'Transfer data from hub to user by emails'
 	message['Subject'] = Header(subject, 'utf-8')
-	 
+
 	#main body
 	message.attach(MIMEText('This email is used to tranfer data from MPS experiment hub to user by emails', 'plain', 'utf-8'))
-	 
+
 	#adding attachment
 	series_dir = "TemperatureSeries"
 	pathname = os.path.dirname(sys.argv[0])
@@ -166,24 +166,21 @@ def SendFilebyEmail(_SeriesFile,_emaill):
 		print "Email successfully sent"
 	except smtplib.SMTPException:
 		print "Error: cannot send emails"
-		
-	
+
+
 def start(_duration=10):
 	time_start = time.time()
-	while(time.time()-time_start)<=_duration):
-	    try:
+	while((time.time()-time_start)<=_duration):
+	    	try:
 			ADC_Read_All()
 			print AdcNow
 			time.sleep(0.01)
 			#WriteData(SeriesFile,ADCNow)
 		except Exception,e:
-		    print "Catch error at timestamp: s%" %formatted_ts
+			print "Catch error"
 			print str(e)
-			
-	#WriteEndline(SeriesFile)
-	
 
-	
+	#WriteEndline(SeriesFile)
 
 
 def main():
@@ -201,10 +198,10 @@ def main():
 	duration = 10 #unit in secnd
 	
 	#get start time
-	unix_ts = time.localtime(time.time())  
+	unix_ts = time.localtime(time.time())
 	time_start = time.time()
-	ts_format = format = '%Y-%m-%d %H:%M'  
-	formatted_ts = time.strftime(format,unix_ts)	
+	ts_format = '%Y-%m-%d %H:%M'
+	formatted_ts = time.strftime(ts_format,unix_ts)
 	print "Task starts at %s" %formatted_ts
 	
 	#start a job

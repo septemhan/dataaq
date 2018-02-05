@@ -36,7 +36,7 @@ GPIO.setup(DataOut,GPIO.IN,GPIO.PUD_UP)
 
 try:
 	while True:
-		print("AD: %d "%ADC_Read(6))
+		print("AD: %d "%ADC_Read(7))
 		time.sleep(0.1)
 except:
 	GPIO.cleanup()
