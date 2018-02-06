@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 import time
 import numpy as np
 import time
+from Tkinter import *
 
 
 #Pin define
@@ -26,7 +27,7 @@ sensor_dict = {
 }
 #Glabal paramters:
 
-AdcNow = [0,0,0,0,0,0,0,0,0]
+AdcNow = [0,0,0,0,0,0,0,0]
 StartStatus = False
 
 
@@ -55,6 +56,8 @@ def ADC_Read_All():
 
 	for channel in range (0,8):
 		AdcNow[channel] = ADC_Read(channel)
+		AdcNow[channel] = 25*((AdcNow[channel]/1024)*5-1)
+		
 
 	#return AdcNow
 
@@ -93,9 +96,9 @@ def WriteData(_SeriesFile,_ADCNow):
 			writeline = ''
 			for d in _ADCNow:
 				writeline = writeline+str(d)+','
-			tempDataFile.write(str(formatted_ts)+','+writeline)
-			tempDataFile.write('\n')
-			tempDataFile.close()
+				tempDataFile.write(str(formatted_ts)+','+writeline)
+				tempDataFile.write('\n')
+				tempDataFile.close()
 	
 	except IOError:
 		print "unbale to create file"
@@ -181,8 +184,57 @@ def start(_duration=10):
 			print str(e)
 
 	#WriteEndline(SeriesFile)
+	
+def launch_gui(_duration)
+	app = Tk();
+	app.title("Temperature Display")
+	app.geometry('450x300+200+200')
+	frame = Frame(app)
+	time_start = time.time()
 
+	TextlabelTemp1 = StringVar()
+	TextlabelTemp2 = StringVar()
+	TextlabelTemp3 = StringVar()
+	TextlabelTemp4 = StringVar()
+	TextlabelTemp5 = StringVar()
+	TextlabelTemp6 = StringVar()
+	TextlabelTemp7 = StringVar()
+	TextlabelTemp8 = StringVar()
+	
+	labelTemp1 = Label(frame, textvariable=TextlabelTemp1)
+	labelTemp2 = Label(frame, textvariable=TextlabelTemp2)
+	labelTemp3 = Label(frame, textvariable=TextlabelTemp3)
+	labelTemp4 = Label(frame, textvariable=TextlabelTemp4)
+	labelTemp5 = Label(frame, textvariable=TextlabelTemp5)
+	labelTemp6 = Label(frame, textvariable=TextlabelTemp6)
+	labelTemp7 = Label(frame, textvariable=TextlabelTemp7)
+	labelTemp8 = Label(frame, textvariable=TextlabelTemp8)
 
+	while ((time.time()-time_start)<=_duration):     #loop forever
+		time.sleep(0.2)  # Sleep (or inWaiting() doesn't give the correct value)
+		ADC_Read_All()
+		
+		TextlabelTemp1.set("Heat Ex Temperature 1:" + str(AdcNow[0]))
+		TextlabelTemp2.set("Heat Ex Temperature 1:" + str(AdcNow[1]))
+		TextlabelTemp3.set("Heat Ex Temperature 1:" + str(AdcNow[2]))
+		TextlabelTemp4.set("Heat Ex Temperature 1:" + str(AdcNow[3]))
+		TextlabelTemp5.set("Heat Ex Temperature 1:" + str(AdcNow[4]))
+		TextlabelTemp6.set("Heat Ex Temperature 1:" + str(AdcNow[5]))
+		TextlabelTemp7.set("Heat Ex Temperature 1:" + str(AdcNow[6]))
+		TextlabelTemp8.set("Heat Ex Temperature 1:" + str(AdcNow[7]))
+		
+		labelTemp1.pack()
+		labelTemp2.pack()
+		labelTemp3.pack()
+		labelTemp4.pack()
+		labelTemp5.pack()
+		labelTemp6.pack()
+		labelTemp7.pack()
+		labelTemp8.pack()
+		
+		frame.pack()
+		app.update()
+	
 def main():
 	#initialize GPIO
 	print "initialize GPIO"
@@ -205,7 +257,7 @@ def main():
 	print "Task starts at %s" %formatted_ts
 	
 	#start a job
-	start(duration)
+	launch_gui(20)
 	
 	#stop GPIO pin
 	GPIO.cleanup()
